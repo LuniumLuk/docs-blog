@@ -1,6 +1,10 @@
 site_name: LuniumLuk's Blog
 theme:
   name: material
+  palette:
+    scheme: slate
+    primary: amber
+    accent: orange
 markdown_extensions:
   - pymdownx.superfences
   - pymdownx.arithmatex:
