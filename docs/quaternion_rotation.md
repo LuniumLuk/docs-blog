@@ -45,7 +45,7 @@ Let's consider a general case for a vector $\overrightarrow{OA}$ rotate around a
 
 First, we want to get the projection of $\overrightarrow{OA}$ to the plane $P$ defined by $\overrightarrow{OB}$ , that is, $\overrightarrow{OB}$ being a normal vector of $P$. 
 
-![](../images/img_01.png)
+![](../images/qt_01.png)
 
 Suppose $A'$ is the projection of $A$ to $P$, and $B'$ is the projection of $A$ to $\overrightarrow{OB}$, $\alpha$ being the angle between $\overrightarrow{OA}$ and $\overrightarrow{OB}$. We have:
 
@@ -69,7 +69,7 @@ $$
 
 Next, we rotate the vector $\overrightarrow{OA'}$ by $\beta$ on the plane $P$ To get vector $\overrightarrow{OC'}$ by adopting the right hand rule:
 
-![](../images/img_02.png)
+![](../images/qt_02.png)
 
 To calculate $\overrightarrow{OC'}$ , we obtain a orthogonal coordinates system using $\overrightarrow{OA'}$ , $\vec{n}$ and $\overrightarrow{OD}$ which is obtained by cross product of  $\vec{n}$ and $\vec{a}$ (For convenience, here we denote normalized vector $\overrightarrow{OA'}$ by $\vec{a}$ ). Therefore $\vec{n} \times \vec{a} = \vec{d} = \frac{\overrightarrow{OD}}{||\overrightarrow{OD}||}$
 
@@ -91,7 +91,7 @@ $$
 
 Here we a special case where the rotation angle $\beta$ is 180 degree, which indicates a mirror reflection of vector $\vec{a}$ with reference to a surface normal $\vec{n}$ ：
 
-![](../images/img_05.png)
+![](../images/qt_05.png)
 
 As the graph above, vector $\vec{a'}$ can be regarded as vector $\vec{a}$ rotate 180 degrees around $\vec{n}$ and inversed.
 
@@ -162,7 +162,7 @@ The ideal interpolation between two quaternions $q_0$ and $q_1$ can be visualize
 
 
 
-![](../images/img_03.png)
+![](../images/qt_03.png)
 
 Relative rotation of two quaternions can be described as:
 
@@ -184,7 +184,7 @@ $$
 
 But this interpolation method creates a rotation that does not land on the very plane determined by the rotation axis of the relative rotation of $q_0$ and $q_1$ :
 
-![](../images/img_04.png)
+![](../images/qt_04.png)
 
 A better way of doing interpolation is to adopt the relative rotation between input quaternions. To get the optimum quaternion, we simply formulate:
 
