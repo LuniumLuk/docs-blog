@@ -57,9 +57,31 @@ L(\theta,\phi) = \sum_{l,m}L_{lm}Y_{lm}(\theta,\phi) \\
 E(\theta,\phi) = \sum_{l,m}E_{lm}Y_{lm}(\theta,\phi)
 $$
 
+To simplify the calculation, we define $A = (\mathbf{n}\cdot\omega)$ , note that A is not dependent on $\phi$ , therefore, m = 0, and we only use l index:
+$$
+A(\theta) = max[cos(\theta),0]=\sum_l A_lY_{l0}(\theta,0)
+$$
+We have:
+$$
+E_{lm} = \sqrt{\frac{4\pi}{2l+1}}A_lL_{lm} \\
+\hat{A_l}=\sqrt{\frac{4\pi}{2l+1}}A_l
+$$
+Therefore:
+$$
+E(\theta,\phi)=\sum_{l,m}\hat{A_l}L_{lm}Y_{lm}(\theta,\phi)
+$$
+Where $\hat{A_l}$ Can be calculated numerically:
+$$
+\hat{A_0}=3.141593 \quad \hat{A_1}=2.094395 \quad \hat{A_2}=0.785398 \\
+\hat{A_3}=0 \quad \hat{A_4}=-0.130900 \quad \hat{A_5}=0 \quad \hat{A_6}=0.049087
+$$
+Because $\hat{A_l}$ decay quickly, for rendering, we only need to consider low-frequency lighting coefficients. More precisely: $l\leq2$ 
 
-
-
+To calculate lunimance L, we do the following prefiltering stage to acquire all needed parameters $L_{lm}$:
+$$
+L_{lm} = \int_{\theta=0}^\pi\int_{\phi=0}^{2\pi}L(\theta,\phi)Y_{lm}(\theta,\phi)sin(\theta)d\theta d\phi
+$$
+which is in the form of integration over a unit sphere's surface area. In computer graphics, we implement this integral simply by sum of the input environment map L and weighted by function Y. Which takes $O(9S)$ where S is the size of environment map.
 
 
 ### Reference
