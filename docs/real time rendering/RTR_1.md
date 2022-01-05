@@ -53,3 +53,17 @@ $$
 
 #### 像素处理（Pixel processing）
 
+这里，Real-Time Rendering这本书将像素处理分为两部分，第一个是像素着色（Pixel Shading），第二个是合并（Merging）
+
+##### 1 像素着色
+
+简而言之，就是OpenGL中所谓的fragment shader，用于输出某一像素的颜色（单个或多个）。这一流程一般在可编程的GPU核心上运行，并且目前在这一阶段中存在多种算法，也能渲染出许多不同的效果。
+
+##### 2 合并
+
+这一阶段也称为ROP（raster operations pipeline）或者render output unit。这时候，颜色信息被储存在color buffer中，而深度信息，储存在depth buffer中，也就是z-buffer。z-buffer和color buffer有相同的大小。z-buffer用于控制该像素是否需要被新的像素覆盖，以及用于执行一些相关的算法。但是z-buffer的弱项是对透明或半透明物体的处理，这往往需要按顺序从远到近进行绘制，或者使用其他的算法。
+
+此外，在color buffer中也可能有一些其他的通道，比如alpha通道。但是，现在的渲染管线中，alpha测试可以在fragment shader中进行，而不需要额外的buffer储存信息。stencil（模板）buffer，类似蒙版，用于储存一些图元相关的信息，在render的时候配合fragment shader使用。
+
+一般而言，合并阶段是部分可编程的，在一些API中甚至是固定管线。然后，color buffer的内容被输出到屏幕上，被人的眼睛所观察到。这里，为了防止被用户观察到图元的绘制过程，一般使用双缓存方法（double buffering），即，使用两张缓存，一张用于展示，一张在后台进行绘制，绘制完成后，进行切换（swap）操作。
+
