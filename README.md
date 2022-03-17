@@ -1,15 +1,19 @@
-# My teck blog
+# My Documentation & Note blog
 
-constructed by: https://squidfunk.github.io/mkdocs-material/
+## This repository is currently Deployed by github-pages and hosted under https://luniumluk.github.io/docs-blog/
 
-to run in local (MacOS):
+constructed by https://squidfunk.github.io/mkdocs-material/
 
-```shell
+# To run local test
+
+The following example works for MacOS
+
+```zsh
 python -m venv md
 
 source ~/md/bin/activate
 
-cd [this folder]
+cd ${ThisDirectory}
 
 pip install -r requirements.txt
 

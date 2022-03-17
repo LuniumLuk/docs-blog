@@ -79,8 +79,6 @@ Understand the **Flow**
 
 Focus on the **Framework**!!
 
-
-
 Source Syllabus
 
 - Basic Elements (Structure and Layer, Data Organization and Management :: MVVM)
