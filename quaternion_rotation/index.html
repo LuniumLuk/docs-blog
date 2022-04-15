@@ -1,0 +1,1102 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+    
+    
+      
+        <title>Rotation with Vectors and Quaternions - LuniumLuk's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.120efc48.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rotation-with-vectors-and-quaternions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LuniumLuk&#39;s Blog" class="md-header__button md-logo" aria-label="LuniumLuk's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LuniumLuk's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Rotation with Vectors and Quaternions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LuniumLuk&#39;s Blog" class="md-nav__button md-logo" aria-label="LuniumLuk's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LuniumLuk's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Prefix
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Scene_Reconstruction/" class="md-nav__link">
+        Scene Reconstruction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Simple_SIMD/" class="md-nav__link">
+        Simple SIMD
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../barycentric_coordinates/" class="md-nav__link">
+        Barycentric coordinates & Mesh transfer
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freeform_deformation/" class="md-nav__link">
+        Freeform Deformation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../laplacian_processing/" class="md-nav__link">
+        Laplacian Mesh Processing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../least_squares/" class="md-nav__link">
+        最小二乘法
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../outlier_processes/" class="md-nav__link">
+        Outlier Processes
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Rotation with Vectors and Quaternions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Rotation with Vectors and Quaternions
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-rules" class="md-nav__link">
+    Basic Rules
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#axis-rotation-for-vector" class="md-nav__link">
+    Axis Rotation for Vector
+  </a>
+  
+    <nav class="md-nav" aria-label="Axis Rotation for Vector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#special-case" class="md-nav__link">
+    Special Case
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#describe-axis-rotation-by-quaternion" class="md-nav__link">
+    Describe Axis Rotation by Quaternion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spherical-linear-interpolation-of-quaternion" class="md-nav__link">
+    Spherical Linear Interpolation of Quaternion
+  </a>
+  
+    <nav class="md-nav" aria-label="Spherical Linear Interpolation of Quaternion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spherical_harmonics/" class="md-nav__link">
+        Spherical harmonics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11">
+          Estar Games
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Estar Games" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Estar Games
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_1/" class="md-nav__link">
+        第一课 游戏引擎综述
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_2/" class="md-nav__link">
+        第二课 渲染管线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_3/" class="md-nav__link">
+        第三课 基础数学
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_4/" class="md-nav__link">
+        第三课 纹理综述
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_12" type="checkbox" id="__nav_12" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12">
+          Games 104
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Games 104" data-md-level="1">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Games 104
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Games_104/Chapter_1/" class="md-nav__link">
+        Games 104 Chapter 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Games_104/Chapter_2/" class="md-nav__link">
+        Games 104 Chapter 2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          Polygon Mesh Processing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Polygon Mesh Processing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Polygon Mesh Processing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Polygon_Mesh_Processing/surface_presentation/" class="md-nav__link">
+        Surface Presentation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_14" type="checkbox" id="__nav_14" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14">
+          Real time Rendering
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Real time Rendering" data-md-level="1">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Real time Rendering
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Real-time_Rendering/Chapter_1/" class="md-nav__link">
+        Real Time Rendering Note # 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Real-time_Rendering/Chapter_2/" class="md-nav__link">
+        Real Time Rendering Note # 2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-rules" class="md-nav__link">
+    Basic Rules
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#axis-rotation-for-vector" class="md-nav__link">
+    Axis Rotation for Vector
+  </a>
+  
+    <nav class="md-nav" aria-label="Axis Rotation for Vector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#special-case" class="md-nav__link">
+    Special Case
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#describe-axis-rotation-by-quaternion" class="md-nav__link">
+    Describe Axis Rotation by Quaternion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spherical-linear-interpolation-of-quaternion" class="md-nav__link">
+    Spherical Linear Interpolation of Quaternion
+  </a>
+  
+    <nav class="md-nav" aria-label="Spherical Linear Interpolation of Quaternion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="rotation-with-vectors-and-quaternions">Rotation with Vectors and Quaternions</h1>
+<h3 id="basic-rules">Basic Rules</h3>
+<p>First, we have to go through some of the basic setup here.</p>
+<p>Quaternions are defined as the following format (similar to imaginary numbers):</p>
+<p>$$
+x\mathbf{i}+y\mathbf{j}+z\mathbf{k}+w
+$$
+or written in axis angle format:</p>
+<div class="arithmatex">\[
+sin(\frac{\alpha}{2})u_x\mathbf{i}+sin(\frac{\alpha}{2})u_y\mathbf{j}+sin(\frac{\alpha}{2})u_z\mathbf{k}+cos(\frac{\alpha}{2})
+\]</div>
+<p>where  <span class="arithmatex">\(\alpha\)</span> is the rotation angle around a certain axis (right hand rule, that is, pointing your thumb to the axis's direction, so the rest of your fingers pointing to the rotation direction), and <span class="arithmatex">\(u_x\)</span> , <span class="arithmatex">\(u_y\)</span> and <span class="arithmatex">\(u_z\)</span> are the normalized coordinates of the axis.</p>
+<p>To discuss the rotation by quaternion, we don't have to go through all the mathematical attributes of quaternion, nor the complex regulations in calculation. But I still have to list the following attributes for the convenience of our later discussion:</p>
+<p>For a normalized quaternion, which is given by <span class="arithmatex">\(x^2 + y^2 + z^2 + w^2 = 1\)</span> we have:</p>
+<div class="arithmatex">\[
+sin(\frac{\alpha}{2})^2u_x^2+sin(\frac{\alpha}{2})^2u_y^2+sin(\frac{\alpha}{2})^2u_z^2+cos(\frac{\alpha}{2})^2 = 1 
+\]</div>
+<div class="arithmatex">\[
+\Rightarrow sin(\frac{\alpha}{2})^2(u_x^2+u_y^2+u_z^2)+cos(\frac{\alpha}{2})^2=1
+\]</div>
+<div class="arithmatex">\[
+\Rightarrow sin(\frac{\alpha}{2})^2(u_x^2+u_y^2+u_z^2)=1-cos(\frac{\alpha}{2})^2
+\]</div>
+<div class="arithmatex">\[
+\Rightarrow sin(\frac{\alpha}{2})^2(u_x^2+u_y^2+u_z^2)=sin(\frac{\alpha}{2})^2
+\]</div>
+<p>Therefore, if a quaternion is normalized, we can get either an identity quaternion ( <span class="arithmatex">\(0\mathbf{i}+0\mathbf{j}+0\mathbf{k}+1\)</span> ), or its rotation axis is also normalized ( <span class="arithmatex">\(u_x^2+u_y^2+u_z^2 = 1\)</span> ).</p>
+<h3 id="axis-rotation-for-vector">Axis Rotation for Vector</h3>
+<p>Let's consider a general case for a vector <span class="arithmatex">\(\overrightarrow{OA}\)</span> rotate around an axis <span class="arithmatex">\(\overrightarrow{OB}\)</span> , here, for convenience the origin of the vector and axis are aligned together. </p>
+<p>First, we want to get the projection of <span class="arithmatex">\(\overrightarrow{OA}\)</span> to the plane <span class="arithmatex">\(P\)</span> defined by <span class="arithmatex">\(\overrightarrow{OB}\)</span> , that is, <span class="arithmatex">\(\overrightarrow{OB}\)</span> being a normal vector of <span class="arithmatex">\(P\)</span>. </p>
+<p><img alt="" src="https://github.com/LuniumLuk/docs-blog/raw/main/images/qt_01.png" /></p>
+<p>Suppose <span class="arithmatex">\(A'\)</span> is the projection of <span class="arithmatex">\(A\)</span> to <span class="arithmatex">\(P\)</span>, and <span class="arithmatex">\(B'\)</span> is the projection of <span class="arithmatex">\(A\)</span> to <span class="arithmatex">\(\overrightarrow{OB}\)</span>, <span class="arithmatex">\(\alpha\)</span> being the angle between <span class="arithmatex">\(\overrightarrow{OA}\)</span> and <span class="arithmatex">\(\overrightarrow{OB}\)</span>. We have:</p>
+<div class="arithmatex">\[
+\overrightarrow{OB'} = \overrightarrow{OB}\cdot||\overrightarrow{OA}||\cdot cos(\alpha)
+\\ \Rightarrow \overrightarrow{OB'} = \overrightarrow{OB}\cdot||\overrightarrow{OA}|| \frac{\overrightarrow{OA} \cdot \overrightarrow{OB}}{||\overrightarrow{OA}|| ||\overrightarrow{OB}||}
+\\ \Rightarrow \overrightarrow{OB'} = \overrightarrow{OB}\frac{\overrightarrow{OA} \cdot \overrightarrow{OB}}{||\overrightarrow{OB}||}
+\]</div>
+<p>To simplify the equation, let's denote the normalized axis <span class="arithmatex">\(\overrightarrow{OB}\)</span> by <span class="arithmatex">\(\vec{n}\)</span>, we have:</p>
+<div class="arithmatex">\[
+\overrightarrow{OB'} = (\overrightarrow{OA}\cdot\vec{n})\cdot\vec{n}
+\]</div>
+<p>So, we can easily get the projection of <span class="arithmatex">\(\overrightarrow{OA}\)</span> to the plane <span class="arithmatex">\(P\)</span> By:</p>
+<div class="arithmatex">\[
+\overrightarrow{OA'} = \overrightarrow{OA}-\overrightarrow{OB'} = \overrightarrow{OA}-(\overrightarrow{OA}\cdot\vec{n})\cdot\vec{n}
+\]</div>
+<p>Next, we rotate the vector <span class="arithmatex">\(\overrightarrow{OA'}\)</span> by <span class="arithmatex">\(\beta\)</span> on the plane <span class="arithmatex">\(P\)</span> To get vector <span class="arithmatex">\(\overrightarrow{OC'}\)</span> by adopting the right hand rule:</p>
+<p><img alt="" src="https://github.com/LuniumLuk/docs-blog/raw/main/images/qt_02.png" /></p>
+<p>To calculate <span class="arithmatex">\(\overrightarrow{OC'}\)</span> , we obtain a orthogonal coordinates system using <span class="arithmatex">\(\overrightarrow{OA'}\)</span> , <span class="arithmatex">\(\vec{n}\)</span> and <span class="arithmatex">\(\overrightarrow{OD}\)</span> which is obtained by cross product of  <span class="arithmatex">\(\vec{n}\)</span> and <span class="arithmatex">\(\vec{a}\)</span> (For convenience, here we denote normalized vector <span class="arithmatex">\(\overrightarrow{OA'}\)</span> by <span class="arithmatex">\(\vec{a}\)</span> ). Therefore <span class="arithmatex">\(\vec{n} \times \vec{a} = \vec{d} = \frac{\overrightarrow{OD}}{||\overrightarrow{OD}||}\)</span></p>
+<div class="arithmatex">\[
+\overrightarrow{OC'} = (\vec{a}\cdot cos(\beta)+\vec{n}\times\vec{a}\cdot sin(\beta)) \cdot ||\overrightarrow{OA'}|| = \overrightarrow{OA'}\cdot cos(\beta) + \vec{n}\times\overrightarrow{OA'}\cdot sin(\beta)
+\]</div>
+<p>Finally, to get the rotation result, we have:</p>
+<div class="arithmatex">\[
+\overrightarrow{OC} = \overrightarrow{OC'} + \overrightarrow{A'A} = \overrightarrow{OC'} + \overrightarrow{OA} - \overrightarrow{OA'}
+\\ \Rightarrow \overrightarrow{OC} = \overrightarrow{OA'}\cdot cos(\beta) + \vec{n}\times\overrightarrow{OA'}\cdot sin(\beta) + \overrightarrow{OA} - \overrightarrow{OA'}
+\\ \Rightarrow \overrightarrow{OC} = \overrightarrow{OA} + \overrightarrow{OA'}\cdot(cos(\beta)-1)+\vec{n}\times\overrightarrow{OA'}\cdot sin(\beta)
+\\ \Rightarrow \overrightarrow{OC} = \overrightarrow{OA} + (\overrightarrow{OA}-(\overrightarrow{OA}\cdot\vec{n})\cdot\vec{n})\cdot(cos(\beta)-1)+\vec{n}\times(\overrightarrow{OA}-(\overrightarrow{OA}\cdot\vec{n})\cdot\vec{n})\cdot sin(\beta)
+\\ \Rightarrow \overrightarrow{OC} = \overrightarrow{OA}\cdot cos(\beta) + (\overrightarrow{OA} \cdot \vec{n})\cdot \vec{n} \cdot (1 - cos(\beta)) + \vec{n}\times \overrightarrow{OA}\cdot sin(\beta)
+\]</div>
+<h4 id="special-case">Special Case</h4>
+<p>Here we a special case where the rotation angle <span class="arithmatex">\(\beta\)</span> is 180 degree, which indicates a mirror reflection of vector <span class="arithmatex">\(\vec{a}\)</span> with reference to a surface normal <span class="arithmatex">\(\vec{n}\)</span> ：</p>
+<p><img alt="" src="https://github.com/LuniumLuk/docs-blog/raw/main/images/qt_05.png" /></p>
+<p>As the graph above, vector <span class="arithmatex">\(\vec{a'}\)</span> can be regarded as vector <span class="arithmatex">\(\vec{a}\)</span> rotate 180 degrees around <span class="arithmatex">\(\vec{n}\)</span> and inversed.</p>
+<p>Therefore we have <span class="arithmatex">\(\vec{a'} = -(\vec{a}\cdot cos(\pi) + (\vec{a}\cdot\vec{n})\cdot\vec{n}\cdot(1-cos(\pi))+\vec{n}\times\vec{a}\cdot sin(\pi)) = \vec{a}-2(\vec{a}\cdot\vec{n})\cdot\vec{n}\)</span></p>
+<h3 id="describe-axis-rotation-by-quaternion">Describe Axis Rotation by Quaternion</h3>
+<p>From the basic rule part, we have the quaternion described by the form <span class="arithmatex">\(sin(\frac{\alpha}{2})u_x\mathbf{i}+sin(\frac{\alpha}{2})u_y\mathbf{j}+sin(\frac{\alpha}{2})u_z\mathbf{k}+cos(\frac{\alpha}{2})\)</span> , and for convenience, we split the quaternion into one vector <span class="arithmatex">\(\vec{u}\)</span> and a number <span class="arithmatex">\(w\)</span> :</p>
+<div class="arithmatex">\[
+\vec{u} = \begin{bmatrix}
+           u_x \\
+           u_y \\
+           u_z
+         \end{bmatrix} \cdot sin(\frac{\alpha}{2}) = \vec{n} \cdot sin(\frac{\alpha}{2}) , w = cos(\frac{\alpha}{2})
+\]</div>
+<p>Notice that <span class="arithmatex">\(\vec{u}\)</span> can be regard as a scaled version of <span class="arithmatex">\(\vec{n}\)</span> from the previous chapter.</p>
+<p>And suppose the vector to rotate by quaternion is <span class="arithmatex">\(\vec{a} = \begin{bmatrix}
+           a_x \\
+           a_y \\
+           a_z
+         \end{bmatrix}\)</span></p>
+<p>We get the following  supposing the quaternion is not an identity quaternion:</p>
+<div class="arithmatex">\[
+w^2 - \vec{u} \cdot \vec{u} = cos^2(\frac{\alpha}{2}) - sin^2(\frac{\alpha}{2}) (u_x^2 + u_z^2 + u_z^2) = cos^2(\frac{\alpha}{2}) - sin^2(\frac{\alpha}{2}) = cos(\alpha)
+\]</div>
+<p>And also:</p>
+<div class="arithmatex">\[
+(\vec{a} \cdot \vec{u})\cdot \vec{u} = (a_xu_x + a_yu_y + a_zu_z)sin(\frac{\alpha}{2}) \cdot \vec{n} \cdot sin(\frac{\alpha}{2})
+\\ =  (a_xu_x + a_yu_y + a_zu_z)\cdot \vec{n} \cdot sin^2(\frac{\alpha}{2}) = (\vec{a} \cdot \vec{n})\cdot\vec{n}\cdot \frac{1 - cos(\alpha)}{2}
+\]</div>
+<p>And finally:</p>
+<div class="arithmatex">\[
+\vec{u} \times \vec{a} \cdot w = \vec{n}\times \vec{a} \cdot sin(\frac{\alpha}{2})cos(\frac{a}{2}) = \vec{n}\times \vec{a} \cdot \frac{sin(\alpha)}{2}
+\]</div>
+<p>Then, as we combine the (10), (11) and (12), we get:</p>
+<div class="arithmatex">\[
+\vec{a}\cdot(w^2-\vec{u}\cdot\vec{u})+(\vec{a}\cdot\vec{u})\cdot\vec{u}\cdot2+\vec{u}\times\vec{a}\cdot{w}\cdot2
+\\ = \vec{a}\cdot cos(\alpha) + (\vec{a} \cdot \vec{n})\cdot \vec{n} \cdot (1 - cos(\alpha)) + \vec{n}\times \vec{a}\cdot sin(\alpha)
+\]</div>
+<p>Which is exactly in the same form as (8), so, we have the method to rotate a vector by quaternion.</p>
+<p>But don't forget that we assume that this quaternion is identity, so we also have to check for an identity quaternion, whether this equation stands. An identity quaternion indicates that <span class="arithmatex">\(sin(\frac{\alpha}{2})=0\)</span> , so this rotation is either degree 0 or 180 (meaning after the rotation, the vector is either parallel or opposite to the origin vector).</p>
+<p>For degree 0 or 360, we have:</p>
+<div class="arithmatex">\[
+\vec{a'} = \vec{a}\cdot(w^2-\vec{u}\cdot\vec{u})+(\vec{a}\cdot\vec{u})\cdot\vec{u}\cdot2+\vec{u}\times\vec{a}\cdot{w}\cdot2 
+\\ = \vec{a}\cdot(1^2-\vec{0}\cdot\vec{0})+(\vec{a}\cdot\vec{0})\cdot\vec{0}\cdot2+\vec{0}\times\vec{a}\cdot{1}\cdot2 = \vec{a}
+\]</div>
+<p>Which indicates no rotation is applied to the vector.</p>
+<h3 id="spherical-linear-interpolation-of-quaternion">Spherical Linear Interpolation of Quaternion</h3>
+<p>The ideal interpolation between two quaternions <span class="arithmatex">\(q_0\)</span> and <span class="arithmatex">\(q_1\)</span> can be visualized as follow, where <span class="arithmatex">\(q\)</span> is the ideal interpolation, <span class="arithmatex">\(\theta\)</span> being the angle between two quaternions and <span class="arithmatex">\(v\)</span> being the rotation axis of the relative rotation from <span class="arithmatex">\(q_0\)</span> to <span class="arithmatex">\(q_1\)</span> .</p>
+<p><img alt="" src="https://github.com/LuniumLuk/docs-blog/raw/main/images/qt_03.png" /></p>
+<p>Relative rotation of two quaternions can be described as:</p>
+<div class="arithmatex">\[
+q_0\Delta q = q_1
+\\ \Rightarrow \Delta q = q_0^{-1}q_1
+\]</div>
+<p>To interpolate quaternions, a most efficient and strait way is to do linear interpolation, simply put:</p>
+<div class="arithmatex">\[
+q' = (1 - \alpha)\cdot q_0 + \alpha\cdot q_1 = \begin{bmatrix}
+           (1-\alpha)x_0 + \alpha x_1 \\
+           (1-\alpha)y_0 + \alpha y_1 \\
+           (1-\alpha)z_0 + \alpha z_1 \\
+           (1-\alpha)w_0 + \alpha w_1
+         \end{bmatrix}
+\]</div>
+<p>But this interpolation method creates a rotation that does not land on the very plane determined by the rotation axis of the relative rotation of <span class="arithmatex">\(q_0\)</span> and <span class="arithmatex">\(q_1\)</span> :</p>
+<p><img alt="" src="https://github.com/LuniumLuk/docs-blog/raw/main/images/qt_04.png" /></p>
+<p>A better way of doing interpolation is to adopt the relative rotation between input quaternions. To get the optimum quaternion, we simply formulate:</p>
+<div class="arithmatex">\[
+q = q_0 \cdot \Delta q^t = q_0 \cdot (q_0^{-1}q_1)^t
+\]</div>
+<p>where <span class="arithmatex">\(q^t\)</span> is defined as:</p>
+<div class="arithmatex">\[
+q = \begin{bmatrix}
+    x \\
+    y \\
+    z \\
+    w \\
+    \end{bmatrix} = \begin{bmatrix}
+    u_x \cdot sin(\frac{\theta}{2}) \\
+    u_y \cdot sin(\frac{\theta}{2}) \\
+    u_z \cdot sin(\frac{\theta}{2}) \\
+    cos(\frac{\theta}{2}) \\
+    \end{bmatrix}
+\\ q^t = \begin{bmatrix}
+    u_x \cdot sin(t\cdot\frac{\theta}{2}) \\
+    u_y \cdot sin(t\cdot\frac{\theta}{2}) \\
+    u_z \cdot sin(t\cdot\frac{\theta}{2}) \\
+    cos(t\cdot\frac{\theta}{2}) \\
+    \end{bmatrix}
+\]</div>
+<p>Therefore, here we already obtained a feasible method of acquiring interpolation between two quaternions, and the implementation in c++ is given as below:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Code sample from project : Lu Renderer</span>
+<span class="n">Quaternion</span><span class="w"> </span><span class="nf">slerp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Quaternion</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Quaternion</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">to</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clamp</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cos_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">to</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// handle parallel quaternions</span>
+<span class="w">    </span><span class="c1">// handle cos_angle &lt; 0</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="n">Quaternion</span><span class="w"> </span><span class="n">delta_q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="n">inverse</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">to</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">acosf</span><span class="p">(</span><span class="n">cos_angle</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">Quaternion</span><span class="w"> </span><span class="n">quat</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">q</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">asinf</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">angle</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">asinf</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">q</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">asinf</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">angle</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">asinf</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">q</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">asinf</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">angle</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">asinf</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="n">acosf</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">angle</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cos_angle</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">quat</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>But the above implementation involves at least two quaternion multiplication which is quite time consuming. Therefore, a much light-burden methods will be shown below:</p>
+<p>First, we rewrite the spherical linear interpolation equation as follow:</p>
+<div class="arithmatex">\[
+q = Slerp(q_0, q_1, t) = c_0(t)q_0 + c_1(t)q_1
+\]</div>
+<p>Where <span class="arithmatex">\(c_0(t)\)</span> and <span class="arithmatex">\(c_1(t)\)</span> are real-valued functions, and <span class="arithmatex">\(c_0(0) = 1, c_0(1) = 0\)</span> , <span class="arithmatex">\(c_1(0) = 0, c_1(1) = 1\)</span> and <span class="arithmatex">\(0 \leq t \leq 1\)</span> .</p>
+<p>And to get an ideal interpolation, suppose here the angle between two quaternions is <span class="arithmatex">\(\theta\)</span> we have:</p>
+<div class="arithmatex">\[
+q \cdot q_0 = (c_0(t)q_0 + c_1(t)q_1) \cdot q_0 = c_0(t) q_0 \cdot q_0 + c_1(t)q_1 \cdot q_0 
+= c_0(t) + c_1(t) cos(\theta) = cos(t\theta)
+\]</div>
+<div class="arithmatex">\[
+q \cdot q_1 = (c_0(t)q_0 + c_1(t)q_1) \cdot q_1 = c_0(t) q_0 \cdot q_1 + c_1(t)q_1 \cdot q_1 
+= c_0(t) cos(\theta) + c_1(t) = cos((1 - t)\theta)
+\]</div>
+<p>With two equations (20) and (21) and two unknown variables <span class="arithmatex">\(c_0(t)\)</span> and <span class="arithmatex">\(c_1(t)\)</span> , we can solve the above equations:</p>
+<div class="arithmatex">\[
+c_0(t) = \frac{cos(t\theta) - cos((1-t)\theta)cos(\theta)}{1 - cos^2(\theta)} \\
+c_1(t) = \frac{cos((1-t)\theta) - cos(t\theta)cos(\theta)}{a - cos^2(\theta)}
+\]</div>
+<div class="arithmatex">\[
+c_0(t) = \frac{cos(\theta)cos((1-t)\theta) + sin(\theta)sin((1-t)\theta) - cos((1-t)\theta)cos(\theta)}{1 - cos^2(\theta)} = \frac{sin(\theta)sin((1-t)\theta)}{sin^2(\theta)} = \frac{sin((1-t)\theta)}{sin(\theta)}
+\]</div>
+<div class="arithmatex">\[
+c_1(t) = \frac{cos(\theta)cos(t\theta) + sin(\theta)sin(t\theta) - cos(t\theta)cos(\theta)}{1 - cos^2(\theta)} = \frac{sin(\theta)sin(t\theta)}{sin^2(\theta)} = \frac{sin(t\theta)}{sin(\theta)}
+\]</div>
+<p>Finally, we have reached a new method of calculating quaternion interpolation:</p>
+<div class="arithmatex">\[
+Slerp(q_0, q_1, t) = \frac{q_0 sin((1-t)\theta) + q_1 cos(t\theta)}{sin(\theta)}
+\]</div>
+<p>And an implementation in c++ is given below, which takes only half the time of the previous algorithm.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Code sample from project : Lu Renderer</span>
+<span class="n">Quaternion</span><span class="w"> </span><span class="nf">slerp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Quaternion</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Quaternion</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">to</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clamp</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cos_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">to</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// handle parallel quaternions</span>
+<span class="w">    </span><span class="c1">// handle cos_angle &lt; 0</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">acosf</span><span class="p">(</span><span class="n">cos_angle</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">sin_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sinf</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">angle_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">angle_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">factor_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sinf</span><span class="p">(</span><span class="n">angle_from</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">sin_angle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">factor_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sinf</span><span class="p">(</span><span class="n">angle_to</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">sin_angle</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">Quaternion</span><span class="w"> </span><span class="n">quat</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">from</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_from</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">to</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_to</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">from</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_from</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">to</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_to</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">from</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_from</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">to</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_to</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">from</span><span class="p">.</span><span class="n">w</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_from</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">to</span><span class="p">.</span><span class="n">w</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor_to</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">quat</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h4 id="references">References:</h4>
+<p>[1] https://www.geometrictools.com/Documentation/Quaternions.pdf</p>
+<p>[2] https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm</p>
+<p>[3] https://github.com/zauonlok/renderer/blob/master/renderer/core/maths.c</p>
+<p>[4] https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/index.htm</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../outlier_processes/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Outlier Processes" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Outlier Processes
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../spherical_harmonics/" class="md-footer__link md-footer__link--next" aria-label="Next: Spherical harmonics" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Spherical harmonics
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

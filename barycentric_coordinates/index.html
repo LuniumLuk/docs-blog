@@ -1,0 +1,1110 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+    
+    
+      
+        <title>Barycentric coordinates & Mesh transfer - LuniumLuk's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.120efc48.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#barycentric-coordinates-mesh-transfer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LuniumLuk&#39;s Blog" class="md-header__button md-logo" aria-label="LuniumLuk's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LuniumLuk's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Barycentric coordinates & Mesh transfer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LuniumLuk&#39;s Blog" class="md-nav__button md-logo" aria-label="LuniumLuk's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LuniumLuk's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Prefix
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Scene_Reconstruction/" class="md-nav__link">
+        Scene Reconstruction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Simple_SIMD/" class="md-nav__link">
+        Simple SIMD
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Barycentric coordinates & Mesh transfer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Barycentric coordinates & Mesh transfer
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    备注
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    前置内容
+  </a>
+  
+    <nav class="md-nav" aria-label="前置内容">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    仿射空间
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    仿射组合
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    仿射变换
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    仿射相关
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    重心坐标
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    计算重心坐标
+  </a>
+  
+    <nav class="md-nav" aria-label="计算重心坐标">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    简化运算
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mesh-transfer-smpl-to-smplx" class="md-nav__link">
+    Mesh Transfer : SMPL to SMPLX
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    参考
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freeform_deformation/" class="md-nav__link">
+        Freeform Deformation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../laplacian_processing/" class="md-nav__link">
+        Laplacian Mesh Processing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../least_squares/" class="md-nav__link">
+        最小二乘法
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../outlier_processes/" class="md-nav__link">
+        Outlier Processes
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quaternion_rotation/" class="md-nav__link">
+        Rotation with Vectors and Quaternions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spherical_harmonics/" class="md-nav__link">
+        Spherical harmonics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11">
+          Estar Games
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Estar Games" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Estar Games
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_1/" class="md-nav__link">
+        第一课 游戏引擎综述
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_2/" class="md-nav__link">
+        第二课 渲染管线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_3/" class="md-nav__link">
+        第三课 基础数学
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Estar_Games/Chapter_4/" class="md-nav__link">
+        第三课 纹理综述
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_12" type="checkbox" id="__nav_12" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12">
+          Games 104
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Games 104" data-md-level="1">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Games 104
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Games_104/Chapter_1/" class="md-nav__link">
+        Games 104 Chapter 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Games_104/Chapter_2/" class="md-nav__link">
+        Games 104 Chapter 2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          Polygon Mesh Processing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Polygon Mesh Processing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Polygon Mesh Processing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Polygon_Mesh_Processing/surface_presentation/" class="md-nav__link">
+        Surface Presentation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_14" type="checkbox" id="__nav_14" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14">
+          Real time Rendering
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Real time Rendering" data-md-level="1">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Real time Rendering
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Real-time_Rendering/Chapter_1/" class="md-nav__link">
+        Real Time Rendering Note # 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Real-time_Rendering/Chapter_2/" class="md-nav__link">
+        Real Time Rendering Note # 2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    备注
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    前置内容
+  </a>
+  
+    <nav class="md-nav" aria-label="前置内容">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    仿射空间
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    仿射组合
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    仿射变换
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    仿射相关
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    重心坐标
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    计算重心坐标
+  </a>
+  
+    <nav class="md-nav" aria-label="计算重心坐标">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    简化运算
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mesh-transfer-smpl-to-smplx" class="md-nav__link">
+    Mesh Transfer : SMPL to SMPLX
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    参考
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="barycentric-coordinates-mesh-transfer">Barycentric coordinates &amp; Mesh transfer</h1>
+<p>重心坐标（Barycentric coordinate），即通过使用单纯形（Simplex）对一个点的坐标表示。比如，在二维平面内，使用一个三角形表示，在三维空间中，用一个四面体（Tetrahedron）表示。重心坐标可以理解为当该点坐标的数值为该单纯形的顶点质量时，该点即为该单纯形的重心。重心坐标分量可以为负数，而当且仅当所有分量为正的时候，点位于单纯形内部。</p>
+<p>在计算机图形学中，重心坐标使用三个scaler描述任意一个落在三角形内的点。计算这样的坐标可以使用下面的等式：
+$$
+P = wA + uB + vC，w+u+v= 1
+$$
+因此，重心坐标的一个相当重要的应用便是在三角形内插值顶点数据，比如法向、颜色、纹理坐标等等。下面通过射线检测的简单代码给出示例：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">size_t</span><span class="w"> </span><span class="n">face_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="n">Vertex</span><span class="w"> </span><span class="n">vt1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertices</span><span class="p">[</span><span class="n">faces</span><span class="p">[</span><span class="n">face_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]];</span><span class="w"></span>
+<span class="n">Vertex</span><span class="w"> </span><span class="n">vt2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertices</span><span class="p">[</span><span class="n">faces</span><span class="p">[</span><span class="n">face_idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]];</span><span class="w"></span>
+<span class="n">Vertex</span><span class="w"> </span><span class="n">vt3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertices</span><span class="p">[</span><span class="n">faces</span><span class="p">[</span><span class="n">face_idx</span><span class="p">][</span><span class="mi">2</span><span class="p">]];</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rayTriangleIntersect</span><span class="p">(...))</span><span class="w"> </span><span class="c1">// if intersects with this triangle</span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">Color</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vt1</span><span class="p">.</span><span class="n">color</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vt2</span><span class="p">.</span><span class="n">color</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vt3</span><span class="p">.</span><span class="n">color</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">Vector3</span><span class="w"> </span><span class="n">normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vt1</span><span class="p">.</span><span class="n">normal</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vt2</span><span class="p">.</span><span class="n">normal</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vt3</span><span class="p">.</span><span class="n">normal</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Vector3</span><span class="w"> </span><span class="n">reflect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ray</span><span class="p">.</span><span class="n">reflect</span><span class="p">(</span><span class="n">normal</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h4 id="_1">备注</h4>
+<p>三角形内点的坐标也可以用UV坐标表示，如下：
+$$
+P = A + u\overrightarrow{AB} + v\overrightarrow{AC}
+\ = A + u(B - A) + v(C - A) = (1-u-v)A+uB+vC
+$$
+因此，UV坐标实际上也是重心坐标的一种变种，也因此，重心坐标的三个参数我们写作 <span class="arithmatex">\(w,u,v\)</span> 的顺序。</p>
+<h3 id="_2">前置内容</h3>
+<h4 id="_3">仿射空间</h4>
+<p>仿射空间（Affine space）是点（points）和向量（vectors）的集合，在仿射空间中，点和点相减得到向量，点和向量相加得到另一个点，但是点和点不能相加。在仿射空间中没有原点（origin）的概念，向量也不和点唯一对应。我们可以描述一个仿射空间为：一个集合 <span class="arithmatex">\(A\)</span> 、一个向量空间 $\overrightarrow{A} $  以及一个映射关系 <span class="arithmatex">\(A\times\overrightarrow{A}\rightarrow{A}\)</span> 。该映射具有结合性（associative）、传递性（transitive），以及一一对应性（bijective）。</p>
+<h4 id="_4">仿射组合</h4>
+<p>仿射组合（Affine combination）是特殊的线性组合，对于一个线性组合：
+$$
+\sum_{i=1}^n \alpha_i \cdot x_i = \alpha_1 x_1 + \alpha_2 x_2 + \cdots + \alpha_n x_n
+$$
+当有：
+$$
+\sum_{i=1}^n \alpha_i = 1
+$$
+时，为仿射组合。</p>
+<p>对一个仿射组合的仿射变换等同于对其向量的仿射变换：
+$$
+T\sum_{i=1}^n \alpha_i \cdot x_i = \sum_{i=1}^n T\alpha_i \cdot x_i
+$$</p>
+<h4 id="_5">仿射变换</h4>
+<p>仿射变换（Affine Transformation）是对一个仿射空间进行一次线性变换，加一次平易变换。仿射变换保留了以下特征：</p>
+<ol>
+<li>点之间的共线性</li>
+<li>直线的平行性</li>
+<li>集合的凸性</li>
+<li>平行线段长度的比例</li>
+<li>不同质量的点组成集合的质心</li>
+</ol>
+<p>仿射变换是仿射空间的一个自同构（Automorphism），即，仿射变换将一个仿射空间映射（可逆）回自身，并且保留其所有仿射子空间的维度。仿射子空间（Affine subspace）的定义为，对于一个仿射空间A，其子空间B的向量空间为A的向量空间的一个子集。</p>
+<p>仿射变换可以描述为：
+$$
+f(x) = A\vec{x} + \vec{b}
+$$
+或者使用增广矩阵：
+$$
+\begin{bmatrix}
+f(x) \
+1
+\end{bmatrix} = \begin{bmatrix}
+A              &amp;\bigm|&amp; \vec{b} \ 
+0 \cdots 0 &amp;\bigm|&amp; 1 
+\end{bmatrix}\begin{bmatrix}
+x \
+1
+\end{bmatrix}
+$$</p>
+<h4 id="_6">仿射相关</h4>
+<p>在n维空间中，n个线性相关（Linear dependent）的点（向量）被描述为：
+$$
+\exists a_i \in \mathbb{R}, \vec{x_i} \in \mathbb{R}^{n}, i = 1,2,...,n \Rightarrow \sum_{i=1}^n a_i \vec{x_i} = \vec{0}
+$$
+而如果不存在这样一组系数使得n个向量的组合为0，则这一组向量线性无关。一个空间的维度由该空间中最大数量的线性无关向量的个数决定。</p>
+<p>仿射相关（Affine dependent）则是在线性相关的基础上，增加一个条件，即 <span class="arithmatex">\(\sum_{i=1}^n a_i = 1\)</span> 。或者，也可以描述为，对n个点，如果其中任意一个点不能被其他点的仿射组合表示，则该n个点线性无关；相反，则线性相关。</p>
+<p>由于仿射空间没有原点的概念，我们可以从n个点选择一个作为原点，如果剩下的n-1个点相对于原点线性相关，则该n个点仿射相关。</p>
+<p>在三维空间中，三个点如果共线或者共点，则为仿射相关；否则，为仿射无关，其仿射组合张成一个二维平面。四个仿射无关的点通过仿射组合张成一个三维空间。</p>
+<h3 id="_7">重心坐标</h3>
+<p>在欧氏空间或者n维仿射空间A中有n+1个仿射无关的点 <span class="arithmatex">\(A_0,...,A_n\)</span> ，任给 <span class="arithmatex">\(P\in A\)</span> ，有一组系数 <span class="arithmatex">\(a_0,...,a_n\)</span> 对任意O（原点）使下式成立：
+$$
+(a_0 + ... + a_n)\overrightarrow{OP} = a_0\overrightarrow{OA_0} + ... + a_n\overrightarrow{OA_n}
+$$
+则，由n+1个元素组成的坐标 <span class="arithmatex">\((a_0:...:a_n)\)</span> 即为点P的重心坐标，具有以下特性：</p>
+<ol>
+<li>该坐标与原点的选择无关</li>
+<li>该坐标为齐次坐标，即该坐标在数值上的缩放并不改变这个坐标，某点P的重心坐标不唯一</li>
+<li>重心坐标具有仿射不变性</li>
+</ol>
+<h3 id="_8">计算重心坐标</h3>
+<p>重心坐标的数值与其内部点P划分出的三个小三角形的面积有关，我们设有三角形 <span class="arithmatex">\(\triangle{ABC}\)</span> ，其内部有一点P，则有：</p>
+<div class="arithmatex">\[
+w = \frac{\triangle{BCP}_{Area}}{\triangle{ABC}_{Area}} \\
+u = \frac{\triangle{ACP}_{Area}}{\triangle{ABC}_{Area}} \\
+v = \frac{\triangle{ABP}_{Area}}{\triangle{ABC}_{Area}}
+\]</div>
+<p>首先，我们熟悉一下三角形的面积计算公式：</p>
+<div class="arithmatex">\[
+\triangle{ABC}_{Area} = \frac{||(B-A)||\cdot||(C-A)||sin(\theta)}{2}
+\\ = \frac{||(B-A)\times(C-A)||}{2}
+\]</div>
+<p>这里，<span class="arithmatex">\(\theta\)</span> 是AB与AC形成的夹角，根据上式，三角形的面积可以视作任意两边向量的叉乘的大小除以2，也就是三角形的未归一化的法向量的长度除以2。</p>
+<div class="highlight"><pre><span></span><code><span class="n">Vector3</span><span class="w"> </span><span class="n">v01</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v0</span><span class="p">;</span><span class="w"></span>
+<span class="n">Vector3</span><span class="w"> </span><span class="n">v02</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v0</span><span class="p">;</span><span class="w"></span>
+<span class="n">Vector3</span><span class="w"> </span><span class="n">normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v01</span><span class="p">.</span><span class="n">cross</span><span class="p">(</span><span class="n">v02</span><span class="p">);</span><span class="w"></span>
+<span class="kt">float</span><span class="w"> </span><span class="n">triangle_area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normal</span><span class="p">.</span><span class="n">length</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+<p>所以，重心坐标的uv可以由下式计算：</p>
+<div class="arithmatex">\[
+u = \frac{\triangle{ACP}_{Area}}{\triangle{ABC}_{Area}} = 
+\frac{||\overrightarrow{AC}\times\overrightarrow{AP}||}{||\overrightarrow{AB}\times\overrightarrow{AC}||} \\
+v = \frac{\triangle{ABP}_{Area}}{\triangle{ABC}_{Area}} = 
+\frac{||\overrightarrow{AB}\times\overrightarrow{AP}||}{||\overrightarrow{AB}\times\overrightarrow{AC}||}
+\]</div>
+<p>这里，因为 <span class="arithmatex">\(\overrightarrow{AB}\times\overrightarrow{AC} = \overrightarrow{N}\)</span> 而且，由于 <span class="arithmatex">\(\overrightarrow{AC}\times\overrightarrow{AP}\)</span> 与 <span class="arithmatex">\(\overrightarrow{N}\)</span> 是同向的（P点在ABC内），为简化计算（避免开销较大的大小计算）我们有：</p>
+<div class="arithmatex">\[
+u = \frac{||\overrightarrow{AC}\times\overrightarrow{AP}||}{||\overrightarrow{AB}\times\overrightarrow{AC}||} = \frac{(\overrightarrow{AC}\times\overrightarrow{AP})\cdot\overrightarrow{N}}{\overrightarrow{N}\cdot\overrightarrow{N}} \\
+v = \frac{||\overrightarrow{AB}\times\overrightarrow{AP}||}{||\overrightarrow{AB}\times\overrightarrow{AC}||} = \frac{(\overrightarrow{AB}\times\overrightarrow{AP})\cdot\overrightarrow{N}}{\overrightarrow{N}\cdot\overrightarrow{N}}
+\]</div>
+<p>此外，由于 <span class="arithmatex">\((\overrightarrow{AC}\times\overrightarrow{AP})\cdot\overrightarrow{N}\)</span> 可用于判断P点是否位于三角形ABC内部，因此在ray tracing的管线中，实际上该值已经计算过，因此更进一步节省了运算开销。对于Ray Tracing中的射线求交，在之后的笔记中会谈到。</p>
+<h4 id="_9">简化运算</h4>
+<p>对于计算机而言，两个三维向量的叉乘开销较大，下面用较为简单的算法计算：</p>
+<div class="arithmatex">\[
+P = wA + uB + vC = (1-u-v)A+uB+vC = A + u(B-A) + v(C-A) \\
+\Rightarrow P - A = u(B-A) + v(C-A) \\
+\Rightarrow \overrightarrow{AP} = u\overrightarrow{AB} + v\overrightarrow{AC}
+\]</div>
+<p>令 <span class="arithmatex">\(\overrightarrow{AB} = \vec{v_0}\)</span> ，<span class="arithmatex">\(\overrightarrow{AC} = \vec{v_1}\)</span> 以及 <span class="arithmatex">\(\overrightarrow{AP} = \vec{v_2}\)</span>， 并且 <span class="arithmatex">\(d_{ij} = \vec{v_i}\cdot\vec{v_j}\)</span> ，则有：</p>
+<div class="arithmatex">\[
+\vec{v_2} = u\vec{v_0} + v\vec{v_1}
+\]</div>
+<p>（15）两边点乘 <span class="arithmatex">\(v_0\)</span> ：</p>
+<div class="arithmatex">\[
+\vec{v_2}\cdot\vec{v_0} = u\vec{v_0}\cdot\vec{v_0} + v\vec{v_1}\cdot\vec{v_0}
+\]</div>
+<p>（15）两边点乘 <span class="arithmatex">\(\vec{v_1}\)</span> ：</p>
+<div class="arithmatex">\[
+\vec{v_2}\cdot\vec{v_1} = u\vec{v_0}\cdot\vec{v_1} + v\vec{v_1}\cdot\vec{v_1}
+\]</div>
+<p>得：</p>
+<div class="arithmatex">\[
+d_{02} = d_{00}u + d_{01}w \\
+d_{12} = d_{01}u + d_{11}w
+\]</div>
+<p>解得：</p>
+<div class="arithmatex">\[
+v = \frac{d_{11}d_{02}-d_{01}d_{12}}{d_{00}d_{11}-d^2_{01}}\qquad
+w = \frac{d_{00}d_{12}-d_{01}d_{02}}{d_{00}d_{11}-d^2_{01}}
+\]</div>
+<h3 id="mesh-transfer-smpl-to-smplx">Mesh Transfer : SMPL to SMPLX</h3>
+<p>smpl是一个人体参数化模型，而smplx则是其升级版，包括带关节的手部模型以及带关节和表情的头部模型。smplx和smpl有着略微区别的pose和shape参数，因此，它们之间的参数并不是可互换的。因此，如果需要将smpl升级为smplx，先将smplx的网格拟合到目标smpl模型的网格上，然后再拟合smplx的参数，得到我们需要的结果。</p>
+<p>具体做法如下：</p>
+<p>首先，使用rest shape的smpl和smplx模型做registration，对每一个smplx模型上的顶点，在smpl模型上找到距离其最近的三角面，并且将smplx的该顶点用重心坐标表示在smpl模型的该三角面上。因此，我们得到以下两个数据：</p>
+<ol>
+<li>一个smplx顶点到smpl三角面的对应表</li>
+<li>一个smplx顶点在对应的smpl三角面上的重心坐标</li>
+</ol>
+<p>同时，使用一个遮罩排除掉smplx上相对于smpl特殊的结构，比如眼球和口腔等等。</p>
+<p>然后，在目标的smpl模型上，令 <span class="arithmatex">\(f_i\in\mathbb{N}^3\)</span> 为SMPLX第i个顶点对应的SMPL的三角面的三个顶点序号，<span class="arithmatex">\([a_i, b_i, c_i]\)</span> 为SMPLX第i个顶点在该三角面中的重心坐标。则SMPLX的第i个顶点可以通过下面的计算获得：
+$$
+v_i^{SMPL-X} = a_i * v_{f_i^0}^{SMPL} + b_i * v_{f_i^1}^{SMPL} + c_i * v_{f_i^2}^{SMPL}
+$$
+这样，我们就获得了在SMPLX拓扑下的模型，然后使用优化拟合的方式，最终得到我们需要的SMPLX参数化模型的beta、pose等参数。</p>
+<h3 id="_10">参考</h3>
+<p>[1] https://en.wikipedia.org/wiki/Barycentric_coordinate_system</p>
+<p>[2] https://en.wikipedia.org/wiki/Affine_space</p>
+<p>[3] https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates</p>
+<p>[4] https://github.com/vchoutas/smplx/blob/master/transfer_model/docs/transfer.md</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../Simple_SIMD/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Simple SIMD" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Simple SIMD
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../freeform_deformation/" class="md-footer__link md-footer__link--next" aria-label="Next: Freeform Deformation" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Freeform Deformation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
